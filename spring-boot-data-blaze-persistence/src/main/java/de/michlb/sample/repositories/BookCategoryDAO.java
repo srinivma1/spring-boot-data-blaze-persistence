@@ -6,8 +6,6 @@ package de.michlb.sample.repositories;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,6 +45,27 @@ public class BookCategoryDAO {
 		                        .getResultList();	
 		
 		return list;
+	}
+	
+	public List<BookCategoryView> getBookCategoriesOrderById(boolean before,boolean after,Integer lastKeyset){
+		CriteriaBuilder<BookCategory> cb = criteriaBuilderFactory.create(entityManager, BookCategory.class,"bookCategory").orderByAsc("bookCategory.id");
+	
+
+		EntityViewSetting<BookCategoryView, CriteriaBuilder<BookCategoryView>> setting = EntityViewSetting.create(BookCategoryView.class);
+		List<BookCategoryView> bookCategoryList = null;
+		if(lastKeyset!=null) {
+			if(before)
+				bookCategoryList = entityViewManager
+                        .applySetting(setting, cb).beforeKeyset(lastKeyset).setMaxResults(20).getResultList();
+			else if(after)
+				bookCategoryList = entityViewManager
+	            .applySetting(setting, cb).afterKeyset(lastKeyset).setMaxResults(20).getResultList();
+		} else {
+			bookCategoryList = entityViewManager
+                    .applySetting(setting, cb).setMaxResults(20).getResultList();
+		}
+		return bookCategoryList;
+		
 	}
 
 }

@@ -5,11 +5,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.michlb.sample.domain.Book;
@@ -33,7 +37,7 @@ public class IndexController {
 
 	
 
-	@RequestMapping("/")
+	@RequestMapping("/all")
 	public String showIndex(Model model) {
 		List<BookCategoryView> personList = personService.loadAll();
 
@@ -75,4 +79,25 @@ public class IndexController {
 
 		return "index"; // return index.html Template
 	}
+	
+	
+	
+	@RequestMapping(value="/", method = RequestMethod.GET)
+	public ResponseEntity<List<BookCategoryView>> showBookCategoryOrderById(@RequestParam("id") Integer id,@RequestParam("before") String before,@RequestParam("after") String after) {
+		boolean beforeKeyset = false;
+		boolean afterKeyset = false;
+		
+		if(("yes").equalsIgnoreCase(before)){
+				beforeKeyset = true;
+				
+		} else if(("yes").equalsIgnoreCase(after)){
+			afterKeyset = true;
+			
+	}
+		
+		
+		List<BookCategoryView> personList = personService.loadBookCategoryOrderById(beforeKeyset, afterKeyset, id);
+return ResponseEntity.ok().body(personList);
+	}
+	
 }

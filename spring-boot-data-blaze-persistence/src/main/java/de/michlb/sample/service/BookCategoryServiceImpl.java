@@ -49,4 +49,12 @@ public Set<BookCategory> findBookCategoryByName(String name) {
 	// TODO Auto-generated method stub
 	return bookCategoryRepository.findByBookCategoryName(name);
 }
+
+@Override
+public List<BookCategoryView> loadBookCategoryOrderById(boolean before, boolean after, Integer lastKeyset) {
+	
+
+	// TODO Auto-generated method stub
+	return bookCategoryDao.getBookCategoriesOrderById(before, after, lastKeyset);
+}
 }

@@ -15,4 +15,6 @@ public interface BookCategoryService {
   void deleteBookCategoryList(List<Integer> ids);
   Set<BookCategory> findBookCategoryByName(String name);
   
+  List<BookCategoryView> loadBookCategoryOrderById(boolean before,boolean after,Integer lastKeyset);
+  
 }
